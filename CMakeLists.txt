@@ -80,7 +80,7 @@ src/Frame.cc
 src/KeyFrameDatabase.cc
 src/Sim3Solver.cc
 src/Initializer.cc
-src/Viewer.cc
+src/HiddenViewer.cc
 src/ImuTypes.cc
 src/G2oTypes.cc
 src/CameraModels/Pinhole.cpp
