@@ -7,7 +7,7 @@ ENDIF()
 
 MESSAGE("Build type: " ${CMAKE_BUILD_TYPE})
 
-set(IGNORE_FLAGS_C "-Wno-unused-but-set-variable -Wno-sign-compare -Wno-deprecated -Wno-dangling-else -Wno-unused-variable -Wno-deprecated-declarations -Wno-maybe-uninitialized -Wno-unused-local-typedefs")
+set(IGNORE_FLAGS_C "-Wno-unused-const-variable -Wno-sign-compare -Wno-deprecated -Wno-deprecated-copy -Wno-dangling-else -Wno-unused-variable -Wno-deprecated-declarations -Wno-uninitialized -Wno-unused-local-typedefs")
 set(IGNORE_FLAGS_CXX "${IGNORE_FLAGS_C} -Wno-reorder -Wno-conversion-null")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall   -O3 ${IGNORE_FLAGS_C}")
@@ -51,12 +51,15 @@ find_package(Eigen3 3.1.0 REQUIRED)
 find_package(Pangolin REQUIRED)
 find_package(realsense2)
 
+add_subdirectory(pybind11)
+
 include_directories(
 ${PROJECT_SOURCE_DIR}
 ${PROJECT_SOURCE_DIR}/include
 ${PROJECT_SOURCE_DIR}/include/CameraModels
 ${EIGEN3_INCLUDE_DIR}
 ${Pangolin_INCLUDE_DIRS}
+${pybind11_INCLUDE_DIRS}
 )
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
@@ -197,3 +200,8 @@ add_executable(stereo_inertial_tum_vi
 Examples/Stereo-Inertial/stereo_inertial_tum_vi.cc)
 target_link_libraries(stereo_inertial_tum_vi ${PROJECT_NAME})
 
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/evaluation)
+add_executable(evaluate
+  evaluation/evaluate.cpp)
+target_link_libraries(evaluate PRIVATE pybind11::embed)
